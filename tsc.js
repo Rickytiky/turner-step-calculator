@@ -2,19 +2,26 @@
 let angle = prompt("Insert angle");
 console.log(`angle: ${angle}`);
 
-//запрашиваем желаемый шаг вдоль оси вращения
-let stepAlongX = prompt("Insert step along X axis");
-console.log(`step along X axis: ${stepAlongX}`);
+//запрашиваем желаемый шаг перпендикулярно оси вращения
+let stepAlongY = prompt("Insert step along Y axis");
+console.log(`step along Y axis: ${stepAlongY}`);
+
+//запрашиваем длину
+let width = prompt("Insert widht");
+console.log(`width: ${width}`);
 console.log(`-----------------------------------------------------`);
 
-//вычисляем
-function stepAlongY () {
-    let result = Math.round(
-        stepAlongX / Math.tan(angle * Math.PI / 180)
-        * 1000) / 1000;
-    let count = 5;
+//вычисляем шаг вдоль оси вращения
+function stepAlongX () {
+    let result = stepAlongY * Math.tan(angle * Math.PI / 180);
+    let count = width / stepAlongY;
     for (let i = 0; i < count; i++)
-    console.log(`step along X axis: ${Number(stepAlongX) + Number(i*stepAlongX)}         step along Y axis: ${Number(result) + Number(i*result)}`);
+    console.log(`step along Y axis: ${Number(stepAlongY) + Number(i*stepAlongY)}         step along Y axis: ${roundTo05(Number(result) + Number(i*result))}`);
 };
 
-stepAlongY();
+//функция округления до 0,05
+function roundTo05(value) {
+    return Math.round(value * 20) / 20;
+};
+
+stepAlongX();
