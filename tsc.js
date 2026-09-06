@@ -1,9 +1,9 @@
 //запрашиваем угол
-let angle = prompt();
+let angle = prompt("Введи угол");
 console.log(`angle: ${angle}`);
 
 //запрашиваем желаемый шаг вдоль оси вращения
-let stepAlongX = prompt();
+let stepAlongX = prompt("Введи шаг вдоль оси");
 console.log(`step along X axis: ${stepAlongX}`);
 console.log(`-----------------------------------------------------`);
 
