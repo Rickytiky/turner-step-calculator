@@ -16,7 +16,7 @@ function stepAlongX () {
     let result = stepAlongY * Math.tan(angle * Math.PI / 180);
     let count = width / stepAlongY;
     for (let i = 0; i < count; i++)
-    console.log(`step along Y axis: ${Number(stepAlongY) + Number(i*stepAlongY)}         step along Y axis: ${roundTo05(Number(result) + Number(i*result))}`);
+    console.log(`step along Y axis: ${(Number(stepAlongY) + Number(i*stepAlongY)).toFixed(2)}         step along Y axis: ${(roundTo05(Number(result) + Number(i*result))).toFixed(2)}`);
 };
 
 //функция округления до 0,05
