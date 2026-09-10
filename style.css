@@ -1,0 +1,185 @@
+body {
+    font-family: "Roboto", sans-serif;
+    background-color: white;
+    margin: 0;
+    font-size: 1rem;
+}
+
+.container {
+    width: 100cqw;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+}
+
+.main, .steps {
+    box-sizing: border-box;
+    width: 360px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main {
+    height: 160px;
+    padding: 0 40px;
+}
+
+.inputs {
+    position: relative;
+    margin-top: 60px;
+}
+
+.inputs img {
+    width: 180px;
+}
+
+.reset {
+    background-color: #00A0E3;
+    color: white;
+    font-weight: 600;
+    font-size: large;
+    border-radius: 50%;
+    aspect-ratio: 1;
+    border: 0;
+    width: 5.5em;
+    height: 5.5em;
+    padding: 0;
+    box-shadow: 0 0 0 0.6em white, 0 0 0 0.8em #00A0E3;
+}
+
+input {
+    border: solid;
+    border-color: #00A0E3;
+    color: #3F5F6D;
+    border-radius: 0.5em;
+    width: 80px;
+    height: 30px;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.lengthA-container {
+    color: #3F5F6D;
+    position: absolute;
+    text-align: center;
+    width: 95px;
+    right: 25px;
+    top: -55px;
+}
+
+.lengthB-container {
+    color: #3F5F6D;
+    position: absolute;
+    text-align: center;
+    width: 95px;
+    right: 175px;
+    top: 80px;
+}
+
+.angle-container {
+    color: #3F5F6D;
+    position: absolute;
+    text-align: center;
+    width: 95px;
+    right: -2px;
+    top: 145px;
+}
+
+span {
+    color: #00A0E3;
+}
+
+input:disabled {
+    background-color: #F4FAFE;
+    cursor: not-allowed;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    margin-top: 50px;
+    align-self: flex-start;
+    width: 110px;
+    height: 60px;
+    margin-left: 25px;
+    padding-left: 10px;
+    color: #3F5F6D;
+    font-size: 0.8em;
+    border-left: solid;
+    border-color: #00A0E3;
+}
+
+.steps {
+    margin-top: 20px;
+    border-top: solid;
+    border-color: #00A0E3;
+    width: 310px;
+}
+
+.number {
+    width: 20%;
+}
+
+.input-steps {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+    gap: 10px;
+    position: relative;
+}
+
+ul {
+    margin-top: 29px;
+    list-style-type: none;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    padding: 0;
+}
+
+.number ul li:nth-child(odd) {
+    width: 270px;
+    background-color: #F4FAFE;
+    padding: 4px 20px;
+    color: #00A0E3;
+    font-size: 0.8em;
+}
+
+.number ul li:nth-child(even) {
+    width: 270px;
+    background-color: white;
+    padding: 4px 20px;
+    color: #00A0E3;
+    font-size: 0.8em
+}
+
+.step ul li:nth-child(odd) {
+    padding: 1px 20px;
+    color: #3F5F6D;
+    text-align: end;
+}
+
+.step ul li:nth-child(even) {
+    padding: 1px 20px;
+    color: #96A7B1;
+    text-align: end;
+}
+
+.input-stepB-container {
+    color: #3F5F6D;
+    position: absolute;
+    text-align: center;
+    width: 95px;
+    left: 21px;
+    top: 7px;
+}
+
+.input-stepA-container {
+    color: #3F5F6D;
+    position: absolute;
+    text-align: center;
+    width: 95px;
+    left: 141px;
+    top: 7px;
+}

@@ -11,6 +11,45 @@
     <script src="tsc.js" defer></script>
 </head>
 <body>
-    
+    <div class="container">
+        <div class="main"> 
+            <button id="resetBtn" class="reset">ОЧИСТКА</button>
+            <div class="inputs">
+                <div class="lengthA-container">длина <span>a</span>
+                    <input id="lengthA" class="triangle-input">
+                </div>
+                <div class="lengthB-container">длина <span>b</span>
+                    <input id="lengthB" class="triangle-input">
+                </div>
+                <div class="angle-container">угол
+                    <input id="angle" class="triangle-input">
+                </div>
+                <img src="./img/triangle.svg" alt="triangle picture">
+            </div>
+        </div>
+        <div class="status" id="status">Ожидание ввода...</div>
+        <div class="steps">
+            <div class="number">
+                <ul id="num">
+                </ul>
+            </div>
+            <div class="input-steps">
+                <div class="input-stepB-container">шаг <span id="span-b">b</span>
+                    <input id="step-b_l45-a">
+                </div>
+                <div class="input-stepA-container">шаг <span id="span-a">a</span>
+                    <input id="step-a_l45-b">
+                </div>
+                <div class="step B">
+                    <ul id="stepB">
+                    </ul>
+                </div>
+                <div class="step A">
+                    <ul id="stepA">
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
