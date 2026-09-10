@@ -128,31 +128,36 @@ resetBtn.addEventListener('click', () => {
 //обработчик события stepInputs
 stepInputs.forEach(input => {
     input.addEventListener('input', () => {
+        if (event.inputType !== 'deleteContentBackward') {
         statusDiv.textContent = 'Печатает...';
         // Реализация Debouncing (задержка 1000мс)
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(stepCalc, 1000);
+        } else return;
     });
 });
 
 //обработчик события stepInputs для стирания
 stepInputs.forEach(input => {
-    input.addEventListener('keydown', (event) => {
-    // Проверяем, была ли нажата клавиша Backspace или Delete
-    if (event.key === 'Backspace' || event.key === 'Delete') {
-    event.preventDefault(); // Отменяем стандартное удаление по одному символу
-    event.target.value = ''; // Полностью очищаем поле
-    
-    //стираем инпуты
+    input.addEventListener('input', (event) => {
+    // Проверяем, было ли действие удалением символа назад (Backspace)
+    if (event.inputType === 'deleteContentBackward') {
+    clearStepInputs ();
+    } else return;
+    });
+});
+
+//функция очистки stepInputs
+function clearStepInputs () {
     stepInputs.forEach(input => {
     input.value = '';
-    input.disabled = false;
     });
     stepNumber.innerHTML = '';
     stepB.innerHTML = '';
     stepA.innerHTML = '';
-  }});
-});
+
+    statusDiv.textContent = "Расчет окончен. Укажите шаг";
+};
 
 //Функция расчета шагов
 function stepCalc () {
@@ -218,6 +223,8 @@ function stepCalc () {
     };
 
     //lockStepInputs();
+
+    statusDiv.textContent = "Расчет окончен";
 };
 
 //функция округления до 0,05
@@ -228,5 +235,4 @@ function roundTo05(value) {
 //функция блокировки StepInputs
 function lockStepInputs() {
     stepInputs.forEach(input => input.disabled = true);
-    statusDiv.textContent = "Расчет окончен.";
 };
