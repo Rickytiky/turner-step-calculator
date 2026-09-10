@@ -135,6 +135,25 @@ stepInputs.forEach(input => {
     });
 });
 
+//обработчик события stepInputs для стирания
+stepInputs.forEach(input => {
+    input.addEventListener('keydown', (event) => {
+    // Проверяем, была ли нажата клавиша Backspace или Delete
+    if (event.key === 'Backspace' || event.key === 'Delete') {
+    event.preventDefault(); // Отменяем стандартное удаление по одному символу
+    event.target.value = ''; // Полностью очищаем поле
+    
+    //стираем инпуты
+    stepInputs.forEach(input => {
+    input.value = '';
+    input.disabled = false;
+    });
+    stepNumber.innerHTML = '';
+    stepB.innerHTML = '';
+    stepA.innerHTML = '';
+  }});
+});
+
 //Функция расчета шагов
 function stepCalc () {
     //переводим значения в числа
@@ -198,7 +217,7 @@ function stepCalc () {
         stepBInput.value = roundTo05(stepBInput.value).toFixed(2);
     };
 
-    lockStepInputs();
+    //lockStepInputs();
 };
 
 //функция округления до 0,05
