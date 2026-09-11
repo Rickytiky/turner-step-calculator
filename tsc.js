@@ -111,7 +111,13 @@ resetBtn.addEventListener('click', () => {
     spanB.textContent = "b";
     spanA.textContent = "a";
     stepBInput = document.querySelector("#step-b_l45-a");
+    stepBInput.style.borderColor = "#3BCCCA";
+    stepBInput.style.backgroundColor = "#F5FFFF";
     stepAInput = document.querySelector("#step-a_l45-b");
+    stepAInput.style.borderColor = "#00A0E3";
+    stepAInput.style.backgroundColor = "#FFFFFF";
+    stepB = document.querySelector("#stepB");
+    stepA = document.querySelector("#stepA");
 
     stepNumber.innerHTML = '';
     stepB.innerHTML = '';
