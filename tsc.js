@@ -21,11 +21,9 @@ let debounceTimer;
 
 //обработчик события triangleInputs
 triangleInputs.forEach(input => {
-    input.addEventListener('input', () => {
+    input.addEventListener('blur', () => {
         statusDiv.textContent = 'Печатает...';
-        // Реализация Debouncing (задержка 1000мс)
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(calculateMissing, 1000);
+        calculateMissing ();
     });
 });
 
@@ -41,9 +39,9 @@ function calculateMissing() {
     };
 
     //переводим значения в числа
-    const alpha = angleInput.value ? parseFloat(angleInput.value) : null;
-    const a = lengthAInput.value ? parseFloat(lengthAInput.value) : null;
-    const b = lengthBInput.value ? parseFloat(lengthBInput.value) : null;
+    const alpha = angleInput.value ? parseInputToNumber(angleInput.value) : null;
+    const a = lengthAInput.value ? parseInputToNumber(lengthAInput.value) : null;
+    const b = lengthBInput.value ? parseInputToNumber(lengthBInput.value) : null;
 
     //проверка на корректность математических данных
     if (alpha !== null && (alpha % 180 === 90 || alpha % 180 === -90)) {
@@ -91,7 +89,7 @@ function calculateMissing() {
 //функция блокировки triangleInputs
 function lockTriangleInputs() {
     triangleInputs.forEach(input => input.disabled = true);
-    statusDiv.textContent = "Расчет окончен. Укажите шаг";
+    statusDiv.textContent = "Укажите шаг и снимите фокус поля ввода";
 };
 
 //функция сброса
@@ -127,12 +125,12 @@ resetBtn.addEventListener('click', () => {
 
 //обработчик события stepInputs
 stepInputs.forEach(input => {
-    input.addEventListener('input', () => {
+    input.addEventListener('blur', () => {
         if (event.inputType !== 'deleteContentBackward') {
         statusDiv.textContent = 'Печатает...';
-        // Реализация Debouncing (задержка 1000мс)
+        // Реализация Debouncing (задержка 500мс)
         clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(stepCalc, 1000);
+        debounceTimer = setTimeout(stepCalc, 500);
         } else return;
     });
 });
@@ -156,15 +154,24 @@ function clearStepInputs () {
     stepB.innerHTML = '';
     stepA.innerHTML = '';
 
-    statusDiv.textContent = "Расчет окончен. Укажите шаг";
+    statusDiv.textContent = "Укажите шаг и снимите фокус поля ввода";
 };
 
 //Функция расчета шагов
 function stepCalc () {
+    // Собираем заполненные инпуты
+    const filledInputs = stepInputs.filter(input => input.value.trim() !== '');
+
+    //если заполнено меньше 1 поля, ничего не делаем
+    if (filledInputs.length < 1) {
+        statusDiv.textContent = "Укажите шаг и снимите фокус поля ввода";
+        return;
+    };
+
     //переводим значения в числа
-    const b = stepBInput.value ? parseFloat(stepBInput.value) : null;
-    const a = stepAInput.value ? parseFloat(stepAInput.value) : null;
-    const alpha = angleInput.value ? parseFloat(angleInput.value) : null;
+    const b = stepBInput.value ? parseInputToNumber(stepBInput.value) : null;
+    const a = stepAInput.value ? parseInputToNumber(stepAInput.value) : null;
+    const alpha = angleInput.value ? parseInputToNumber(angleInput.value) : null;
 
     //проверка на корректность математических данных
     if (b === 0 || a === 0) {
@@ -175,8 +182,8 @@ function stepCalc () {
     //расчет шага в зависимости от того, какой шаг ввели
     if (a === null) {
         const rad = alpha * Math.PI / 180;
-        stepAInput.value = stepBInput.value * Math.tan(rad);
-        const count = lengthBInput.value / stepBInput.value;
+        stepAInput.value = parseInputToNumber(stepBInput.value) * Math.tan(rad);
+        const count = parseInputToNumber(lengthBInput.value) / parseInputToNumber(stepBInput.value);
         for (let i = 0; i < count; i++) {
 
             //добавляем номер шага
@@ -186,21 +193,21 @@ function stepCalc () {
 
             //шаг b
             const nextStepB = document.createElement("li");
-            nextStepB.textContent = `${(parseFloat(stepBInput.value) + i*parseFloat(stepBInput.value)).toFixed(2)}`;
+            nextStepB.textContent = `${(roundTo05(parseInputToNumber(stepBInput.value) + i*parseInputToNumber(stepBInput.value))).toFixed(2)}`;
             stepB.appendChild(nextStepB);
 
             //шаг a
             const nextStepA = document.createElement("li");
-            nextStepA.textContent = `${(roundTo05(parseFloat(stepAInput.value) + i*parseFloat(stepAInput.value))).toFixed(2)}`;
+            nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
             stepA.appendChild(nextStepA);
         };
-        stepAInput.value = roundTo05(stepAInput.value).toFixed(2);
-        stepBInput.value = roundTo05(stepBInput.value).toFixed(2);
+        stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
+        stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
 
     } else if (b === null){
         const rad = alpha * Math.PI / 180;
-        stepBInput.value = stepAInput.value / Math.tan(rad);
-        const count = lengthAInput.value / stepAInput.value;
+        stepBInput.value = parseInputToNumber(stepAInput.value) / Math.tan(rad);
+        const count = parseInputToNumber(lengthAInput.value) / parseInputToNumber(stepAInput.value);
         for (let i = 0; i < count; i++) {
 
             //добавляем номер шага
@@ -210,19 +217,17 @@ function stepCalc () {
 
             //шаг b
             const nextStepB = document.createElement("li");
-            nextStepB.textContent = `${(parseFloat(stepBInput.value) + i*parseFloat(stepBInput.value)).toFixed(2)}`;
+            nextStepB.textContent = `${(roundTo05(parseInputToNumber(stepBInput.value) + i*parseInputToNumber(stepBInput.value))).toFixed(2)}`;
             stepB.appendChild(nextStepB);
 
             //шаг a
             const nextStepA = document.createElement("li");
-            nextStepA.textContent = `${(roundTo05(parseFloat(stepAInput.value) + i*parseFloat(stepAInput.value))).toFixed(2)}`;
+            nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
             stepA.appendChild(nextStepA);
         };
-        stepAInput.value = roundTo05(stepAInput.value).toFixed(2);
-        stepBInput.value = roundTo05(stepBInput.value).toFixed(2);
+        stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
+        stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
     };
-
-    //lockStepInputs();
 
     statusDiv.textContent = "Расчет окончен";
 };
@@ -236,3 +241,25 @@ function roundTo05(value) {
 function lockStepInputs() {
     stepInputs.forEach(input => input.disabled = true);
 };
+
+//функция перевода значения из инпутов в числа (безопасная в сравнении с eval)
+function parseInputToNumber(inputValue) {
+  // Убираем лишние пробелы
+  const sanitized = inputValue.trim();
+
+  // Если инпут пустой, возвращаем 0 или null
+  if (!sanitized) return 0;
+
+  try {
+    // Безопасный аналог eval() через создание новой функции
+    // Он выполнит математическое выражение и вернет результат
+    const result = new Function(`return (${sanitized})`)();
+    
+    // Проверяем, что получилось именно число
+    return typeof result === 'number' && !isNaN(result) ? result : 0;
+  } catch (error) {
+    // Если пользователь ввел некорректное выражение (например, "2 + привет")
+    statusDiv.textContent = "Ошибка валидации выражения";
+    return 0; 
+  }
+}
