@@ -80,7 +80,11 @@ function calculateMissing() {
         spanB.textContent = "a";
         spanA.textContent = "b";
         stepBInput = document.querySelector("#step-a_l45-b");
+        stepBInput.style.borderColor = "#3BCCCA";
+        stepBInput.style.backgroundColor = "#F5FFFF";
         stepAInput = document.querySelector("#step-b_l45-a");
+        stepAInput.style.borderColor = "#00A0E3";
+        stepAInput.style.backgroundColor = "#FFFFFF";
         stepB = document.querySelector("#stepA");
         stepA = document.querySelector("#stepB"); 
     };
@@ -113,10 +117,10 @@ resetBtn.addEventListener('click', () => {
     stepB.innerHTML = '';
     stepA.innerHTML = '';
 
-    resetBtn.style.backgroundColor = '#F4FAFE';
+    resetBtn.style.backgroundColor = '#00A0E3';
     resetBtn.style.color = '#00A0E3';
     setTimeout(() => {
-      resetBtn.style.backgroundColor = '#00A0E3';
+      resetBtn.style.backgroundColor = '#3BCCCA';
       resetBtn.style.color = '#FFFFFF';
     }, 500);
     
