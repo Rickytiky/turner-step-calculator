@@ -2,22 +2,30 @@
 const angleInput = document.querySelector("#angle");
 const lengthBInput = document.querySelector("#lengthB");
 const lengthAInput = document.querySelector("#lengthA");
-const stepAlongBInput = document.querySelector("#stepB");
-const stepAlongAInput = document.querySelector("#stepA");
 const resetBtn = document.querySelector("#resetBtn");
+const unoBtn = document.querySelector("#uno");
 const statusDiv = document.querySelector("#status");
+const stepNumber = document.querySelector("#num");
 let stepBInput = document.querySelector("#step-b_l45-a");
 let stepAInput = document.querySelector("#step-a_l45-b");
-const spanB = document.querySelector("#span-b");
-const spanA = document.querySelector("#span-a");
-const stepNumber = document.querySelector("#num");
+let spanB = document.querySelector("#span-b");
+let spanA = document.querySelector("#span-a");
 let stepB = document.querySelector("#stepB");
 let stepA = document.querySelector("#stepA");
-const mask = document.querySelector(".input-stepA-container");
 
 const triangleInputs = [angleInput, lengthBInput, lengthAInput];
 const stepInputs = [stepBInput, stepAInput];
 let debounceTimer;
+
+let stepAInputFirst;
+let stepBInputFirst;
+
+stepBInput.style.borderColor = "#3BCCCA";
+stepAInput.style.borderColor = "#00A0E3";
+
+//выключены step и кнопка uno до того как будет произведен расчет
+lockStepInputs();
+unoBtn.disabled = true;
 
 //обработчик события triangleInputs
 triangleInputs.forEach(input => {
@@ -72,28 +80,25 @@ function calculateMissing() {
         lengthBInput.value = (a / Math.tan(rad)).toFixed(2);
     };
 
-    //блокируем инпуты после успешного расчета
+    //блокируем TriangleInputs после успешного расчета
     lockTriangleInputs();
 
-    //меняем местами шаги если угол больше 45 градусов
-    if (angleInput.value > 45) {
-        spanB.textContent = "a";
-        spanA.textContent = "b";
-        stepBInput = document.querySelector("#step-a_l45-b");
-        stepBInput.style.borderColor = "#3BCCCA";
-        stepBInput.style.backgroundColor = "#F5FFFF";
-        stepAInput = document.querySelector("#step-b_l45-a");
-        stepAInput.style.borderColor = "#00A0E3";
-        stepAInput.style.backgroundColor = "#FFFFFF";
-        stepB = document.querySelector("#stepA");
-        stepA = document.querySelector("#stepB"); 
-    };
+    //разблокируем stepInputs после успешного расчета
+    stepInputs.forEach(input => {
+    input.value = '';
+    input.disabled = false;
+    });
 };
 
 //функция блокировки triangleInputs
 function lockTriangleInputs() {
     triangleInputs.forEach(input => input.disabled = true);
     statusDiv.textContent = "Укажите шаг и снимите фокус поля ввода";
+};
+
+//функция блокировки stepInputs
+function lockStepInputs() {
+    stepInputs.forEach(input => input.disabled = true);
 };
 
 //функция сброса
@@ -105,19 +110,20 @@ resetBtn.addEventListener('click', () => {
 
     stepInputs.forEach(input => {
         input.value = '';
-        input.disabled = false;
+        input.disabled = true;
     });
 
+    unoBtn.disabled = true;
+
+    stepBInput = document.querySelector("#step-b_l45-a");
+    stepAInput = document.querySelector("#step-a_l45-b");
     spanB.textContent = "b";
     spanA.textContent = "a";
-    stepBInput = document.querySelector("#step-b_l45-a");
-    stepBInput.style.borderColor = "#3BCCCA";
-    stepBInput.style.backgroundColor = "#F5FFFF";
-    stepAInput = document.querySelector("#step-a_l45-b");
-    stepAInput.style.borderColor = "#00A0E3";
-    stepAInput.style.backgroundColor = "#FFFFFF";
     stepB = document.querySelector("#stepB");
     stepA = document.querySelector("#stepA");
+
+    stepBInput.style.borderColor = "#3BCCCA";
+    stepAInput.style.borderColor = "#00A0E3";
 
     stepNumber.innerHTML = '';
     stepB.innerHTML = '';
@@ -211,8 +217,16 @@ function stepCalc () {
             nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
             stepA.appendChild(nextStepA);
         };
+        //сохраняем точные значения и округляем их для вывода на экран
+        stepBInput.dataset.fullValue = stepBInput.value;
+        stepAInput.dataset.fullValue = "";
         stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
         stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
+
+        //записываем что был введен шаг b (для функции uno)
+        stepBInputFirst = true;
+        stepAInputFirst = false;
+        unoBtn.disabled = false;
 
     } else if (b === null){
         const rad = alpha * Math.PI / 180;
@@ -235,21 +249,57 @@ function stepCalc () {
             nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
             stepA.appendChild(nextStepA);
         };
+        //сохраняем точные значения и округляем их для вывода на экран
+        stepAInput.dataset.fullValue = stepAInput.value;
+        stepBInput.dataset.fullValue = "";
         stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
         stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
+
+        //записываем что был введен шаг a (для функции uno)
+        stepAInputFirst = true;
+        stepBInputFirst = false;
+        unoBtn.disabled = false;
     };
 
     statusDiv.textContent = "Расчет окончен";
 };
 
+//функция смены stepInputs
+function uno() {  
+    clearStepInputs ();
+    [stepAInput.dataset.fullValue, stepBInput.dataset.fullValue] = [stepBInput.dataset.fullValue, stepAInput.dataset.fullValue];
+    stepAInput.value = stepAInput.dataset.fullValue;
+    stepBInput.value = stepBInput.dataset.fullValue;
+    [stepAInput, stepBInput] = [stepBInput, stepAInput];
+    [stepAInput.style.borderColor, stepBInput.style.borderColor] = [stepBInput.style.borderColor, stepAInput.style.borderColor];
+    [stepA, stepB] = [stepB, stepA];
+    [spanA.textContent, spanB.textContent] = [spanB.textContent, spanA.textContent];
+    stepCalc ();
+};
+        /*
+            [stepAInput.dataset.fullValue, stepBInput.dataset.fullValue] = [stepBInput.dataset.fullValue, stepAInput.dataset.fullValue];
+    stepAInput.value = stepAInput.dataset.fullValue;
+    stepBInput.value = stepBInput.dataset.fullValue;
+        
+        spanB.textContent = "a";
+        spanA.textContent = "b";
+        stepBInput = document.querySelector("#step-a_l45-b");
+        stepBInput.style.borderColor = "#3BCCCA";
+        stepAInput = document.querySelector("#step-b_l45-a");
+        stepAInput.style.borderColor = "#00A0E3";
+        stepB = document.querySelector("#stepA");
+        stepA = document.querySelector("#stepB"); */
+
+
+
+//кнопка смены stepInputs
+unoBtn.addEventListener('click', () => {
+    uno();
+});
+
 //функция округления до 0,05
 function roundTo05(value) {
     return Math.round(value * 20) / 20;
-};
-
-//функция блокировки StepInputs
-function lockStepInputs() {
-    stepInputs.forEach(input => input.disabled = true);
 };
 
 //функция перевода значения из инпутов в числа (безопасная в сравнении с eval)
@@ -271,5 +321,5 @@ function parseInputToNumber(inputValue) {
     // Если пользователь ввел некорректное выражение (например, "2 + привет")
     statusDiv.textContent = "Ошибка валидации выражения";
     return 0; 
-  }
-}
+  };
+};
