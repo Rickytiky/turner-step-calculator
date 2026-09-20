@@ -147,36 +147,39 @@ ul {
     margin-top: 29px;
     list-style-type: none;
     font-size: 1.2rem;
-    line-height: 1.6;
     padding: 0;
 }
 
 .number ul li:nth-child(odd) {
     width: 270px;
     background-color: #F4FAFE;
-    padding: 4px 20px;
+    padding: 0 20px;
     color: #00A0E3;
-    font-size: 0.8em;
+    font-size: 0.9rem;
+    line-height: 32px;
 }
 
 .number ul li:nth-child(even) {
     width: 270px;
     background-color: white;
-    padding: 4px 20px;
+    padding: 0 20px;
     color: #00A0E3;
-    font-size: 0.8em
+    font-size: 0.9rem;
+    line-height: 32px;
 }
 
 .step ul li:nth-child(odd) {
-    padding: 1px 20px;
+    padding: 0 20px;
     color: #3F5F6D;
     text-align: end;
+    line-height: 32px;
 }
 
 .step ul li:nth-child(even) {
-    padding: 1px 20px;
+    padding: 0 20px;
     color: #96A7B1;
     text-align: end;
+    line-height: 32px;
 }
 
 .uno {
@@ -192,6 +195,10 @@ ul {
     padding: 0;
     left: 123px;
     top: 3px;
+}
+
+.flip {
+    transform: scaleX(-1);
 }
 
 .input-stepB-container {

@@ -274,23 +274,9 @@ function uno() {
     [stepAInput.style.borderColor, stepBInput.style.borderColor] = [stepBInput.style.borderColor, stepAInput.style.borderColor];
     [stepA, stepB] = [stepB, stepA];
     [spanA.textContent, spanB.textContent] = [spanB.textContent, spanA.textContent];
+    unoBtn.classList.toggle('flip');
     stepCalc ();
 };
-        /*
-            [stepAInput.dataset.fullValue, stepBInput.dataset.fullValue] = [stepBInput.dataset.fullValue, stepAInput.dataset.fullValue];
-    stepAInput.value = stepAInput.dataset.fullValue;
-    stepBInput.value = stepBInput.dataset.fullValue;
-        
-        spanB.textContent = "a";
-        spanA.textContent = "b";
-        stepBInput = document.querySelector("#step-a_l45-b");
-        stepBInput.style.borderColor = "#3BCCCA";
-        stepAInput = document.querySelector("#step-b_l45-a");
-        stepAInput.style.borderColor = "#00A0E3";
-        stepB = document.querySelector("#stepA");
-        stepA = document.querySelector("#stepB"); */
-
-
 
 //кнопка смены stepInputs
 unoBtn.addEventListener('click', () => {
