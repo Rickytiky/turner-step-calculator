@@ -2,12 +2,17 @@
 const angleInput = document.querySelector("#angle");
 const lengthBInput = document.querySelector("#lengthB");
 const lengthAInput = document.querySelector("#lengthA");
+const roundNoRoundInput = document.querySelector("#no-round");
+const round001Input = document.querySelector("#round-to-1_100");
+const round005Input = document.querySelector("#round-to-5_100");
+const roundCustomUpInput = document.querySelector("#round-to-custom-up");
+const roundCustomDownInput = document.querySelector("#round-to-custom-down");
 const resetBtn = document.querySelector("#resetBtn");
 const unoBtn = document.querySelector("#uno");
 const statusDiv = document.querySelector("#status");
 const stepNumber = document.querySelector("#num");
-let stepBInput = document.querySelector("#step-b_l45-a");
-let stepAInput = document.querySelector("#step-a_l45-b");
+let stepBInput = document.querySelector("#input-stepB");
+let stepAInput = document.querySelector("#input-stepA");
 let spanB = document.querySelector("#span-b");
 let spanA = document.querySelector("#span-a");
 let stepB = document.querySelector("#stepB");
@@ -15,13 +20,9 @@ let stepA = document.querySelector("#stepA");
 
 const triangleInputs = [angleInput, lengthBInput, lengthAInput];
 const stepInputs = [stepBInput, stepAInput];
+const roundInputs = [roundNoRoundInput, round001Input, round005Input];
+const roundCustomInputs = [roundCustomUpInput, roundCustomDownInput];
 let debounceTimer;
-
-let stepAInputFirst;
-let stepBInputFirst;
-
-stepBInput.style.borderColor = "#3BCCCA";
-stepAInput.style.borderColor = "#00A0E3";
 
 //выключены step и кнопка uno до того как будет произведен расчет
 lockStepInputs();
@@ -101,6 +102,11 @@ function lockStepInputs() {
     stepInputs.forEach(input => input.disabled = true);
 };
 
+//функция блокировки roundCustomInputs
+function lockRoundCustomInputs() {
+    roundCustomInputs.forEach(input => input.disabled = true);
+};
+
 //функция сброса
 resetBtn.addEventListener('click', () => {
     triangleInputs.forEach(input => {
@@ -115,8 +121,8 @@ resetBtn.addEventListener('click', () => {
 
     unoBtn.disabled = true;
 
-    stepBInput = document.querySelector("#step-b_l45-a");
-    stepAInput = document.querySelector("#step-a_l45-b");
+    stepBInput = document.querySelector("#input-stepB");
+    stepAInput = document.querySelector("#input-stepA");
     spanB.textContent = "b";
     spanA.textContent = "a";
     stepB = document.querySelector("#stepB");
@@ -138,6 +144,102 @@ resetBtn.addEventListener('click', () => {
     
     statusDiv.textContent = 'Ожидание ввода...';
 });
+
+//обработчик события roundInputs для чекбоксов
+roundInputs.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+      // Если текущий чекбокс выбран
+      if (this.checked) {
+        roundInputs.forEach(box => {
+            if (box !== this) {
+                box.disabled = true;
+            }
+        });
+        clearRoundCustomInputs();
+        lockRoundCustomInputs();
+      } else {
+        // Если галочку сняли — разблокируем абсолютно все
+        roundInputs.forEach(box => {
+          box.disabled = false;
+        });
+        roundCustomInputs.forEach(box => {
+          box.disabled = false;
+        });
+      }
+    });
+  });
+
+//обработчик события roundInputs для инпутов
+roundCustomInputs.forEach(input => {
+    input.addEventListener('blur', () => {
+
+    // Собираем заполненные инпуты
+    const filledInputs = roundCustomInputs.filter(input => input.value.trim() !== '');
+
+    //если заполнено меньше 2 полей, ничего не делаем
+    if (filledInputs.length < 2) {
+        lockStepInputs();
+        return;
+    }
+
+    //переводим значения в числа
+    const a = roundCustomUpInput.value ? parseInputToNumber(roundCustomUpInput.value) : null;
+    const b = roundCustomDownInput.value ? parseInputToNumber(roundCustomDownInput.value) : null;
+
+    //проверка на корректность математических данных
+    if (a === 0 || b === 0) {
+        statusDiv.textContent = 'Ошибка: значения не могут быть равны 0';
+        return;
+    }
+    if (a > b) {
+        statusDiv.textContent = 'Ошибка: числитель не может быть больше знаменателя';
+        return;
+    };
+    clearStepInputs ();
+    //разблокируем stepInputs
+    if (triangleInputs.every(input => input.disabled)) {
+    stepInputs.forEach(input => {
+    input.value = '';
+    input.disabled = false;
+    });
+    };
+
+    //блокируем все чекбоксы
+    roundInputs.forEach(box => {
+          box.disabled = true;
+        });
+    });
+});
+
+//обработчик события roundCustomInputs для стирания
+roundCustomInputs.forEach(input => {
+    input.addEventListener('input', (event) => {
+    // Проверяем, было ли действие удалением символа назад (Backspace)
+    if (event.inputType === 'deleteContentBackward') {
+    clearRoundCustomInputs ();
+    statusDiv.textContent = 'Ожидание ввода...';
+    roundInputs.forEach(box => {
+        box.disabled = false;
+        });
+    } else return;
+    });
+});
+
+//функция очистки roundCustomInputs
+function clearRoundCustomInputs () {
+    roundCustomInputs.forEach(input => {
+    input.value = '';
+    });
+    roundCustomUpInput.innerHTML = '';
+    roundCustomDownInput.innerHTML = '';
+    if (triangleInputs.every(input => input.disabled)) {
+    stepInputs.forEach(input => {
+    input.value = '';
+    input.disabled = false;
+    });
+    };
+    clearStepInputs ();
+};
 
 //обработчик события stepInputs
 stepInputs.forEach(input => {
@@ -185,8 +287,8 @@ function stepCalc () {
     };
 
     //переводим значения в числа
-    const b = stepBInput.value ? parseInputToNumber(stepBInput.value) : null;
-    const a = stepAInput.value ? parseInputToNumber(stepAInput.value) : null;
+    let b = stepBInput.value ? parseInputToNumber(stepBInput.value) : null;
+    let a = stepAInput.value ? parseInputToNumber(stepAInput.value) : null;
     const alpha = angleInput.value ? parseInputToNumber(angleInput.value) : null;
 
     //проверка на корректность математических данных
@@ -198,8 +300,8 @@ function stepCalc () {
     //расчет шага в зависимости от того, какой шаг ввели
     if (a === null) {
         const rad = alpha * Math.PI / 180;
-        stepAInput.value = parseInputToNumber(stepBInput.value) * Math.tan(rad);
-        const count = parseInputToNumber(lengthBInput.value) / parseInputToNumber(stepBInput.value);
+        a = b * Math.tan(rad);
+        const count = parseInputToNumber(lengthBInput.value) / b;
         for (let i = 0; i < count; i++) {
 
             //добавляем номер шага
@@ -209,29 +311,28 @@ function stepCalc () {
 
             //шаг b
             const nextStepB = document.createElement("li");
-            nextStepB.textContent = `${(roundTo05(parseInputToNumber(stepBInput.value) + i*parseInputToNumber(stepBInput.value))).toFixed(2)}`;
+            nextStepB.textContent = `${(roundToCustom(b + i*b))}`;
             stepB.appendChild(nextStepB);
 
             //шаг a
             const nextStepA = document.createElement("li");
-            nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
+            nextStepA.textContent = `${(roundToCustom(a + i*a))}`;
             stepA.appendChild(nextStepA);
         };
+        
         //сохраняем точные значения и округляем их для вывода на экран
         stepBInput.dataset.fullValue = stepBInput.value;
         stepAInput.dataset.fullValue = "";
-        stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
-        stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
+        stepAInput.value = roundToCustom(a);
+        stepBInput.value = roundToCustom(b);
 
-        //записываем что был введен шаг b (для функции uno)
-        stepBInputFirst = true;
-        stepAInputFirst = false;
+        //разблокируем uno
         unoBtn.disabled = false;
 
     } else if (b === null){
         const rad = alpha * Math.PI / 180;
-        stepBInput.value = parseInputToNumber(stepAInput.value) / Math.tan(rad);
-        const count = parseInputToNumber(lengthAInput.value) / parseInputToNumber(stepAInput.value);
+        b = a / Math.tan(rad);
+        const count = parseInputToNumber(lengthAInput.value) / a;
         for (let i = 0; i < count; i++) {
 
             //добавляем номер шага
@@ -241,23 +342,22 @@ function stepCalc () {
 
             //шаг b
             const nextStepB = document.createElement("li");
-            nextStepB.textContent = `${(roundTo05(parseInputToNumber(stepBInput.value) + i*parseInputToNumber(stepBInput.value))).toFixed(2)}`;
+            nextStepB.textContent = `${(roundToCustom(b + i*b))}`;
             stepB.appendChild(nextStepB);
 
             //шаг a
             const nextStepA = document.createElement("li");
-            nextStepA.textContent = `${(roundTo05(parseInputToNumber(stepAInput.value) + i*parseInputToNumber(stepAInput.value))).toFixed(2)}`;
+            nextStepA.textContent = `${(roundToCustom(a + i*a))}`;
             stepA.appendChild(nextStepA);
         };
+
         //сохраняем точные значения и округляем их для вывода на экран
         stepAInput.dataset.fullValue = stepAInput.value;
         stepBInput.dataset.fullValue = "";
-        stepAInput.value = roundTo05(parseInputToNumber(stepAInput.value)).toFixed(2);
-        stepBInput.value = roundTo05(parseInputToNumber(stepBInput.value)).toFixed(2);
+        stepAInput.value = roundToCustom(a);
+        stepBInput.value = roundToCustom(b);
 
-        //записываем что был введен шаг a (для функции uno)
-        stepAInputFirst = true;
-        stepBInputFirst = false;
+        //разблокируем uno
         unoBtn.disabled = false;
     };
 
@@ -283,9 +383,21 @@ unoBtn.addEventListener('click', () => {
     uno();
 });
 
-//функция округления до 0,05
-function roundTo05(value) {
-    return Math.round(value * 20) / 20;
+//функция округления до custom
+function roundToCustom(value) {
+    if (roundNoRoundInput.checked) {
+        return value;
+    } else if (round001Input.checked) {
+        return (Math.round(value * 100) / 100).toFixed(2);
+    } else if (round005Input.checked) {
+        return (Math.round(value * 20) / 20).toFixed(2);
+    } else if (roundInputs.every(input => !input.checked) && roundInputs.every(input => input.disabled)) {
+    //переводим значения в числа
+    let numerator = roundCustomUpInput.value ? parseInputToNumber(roundCustomUpInput.value) : null;
+    let denominator = roundCustomDownInput.value ? parseInputToNumber(roundCustomDownInput.value) : null;
+    return (Math.round((value * denominator) / numerator
+            ) * numerator / denominator).toFixed(denominator.toString().length-1);
+    } else return value;
 };
 
 //функция перевода значения из инпутов в числа (безопасная в сравнении с eval)

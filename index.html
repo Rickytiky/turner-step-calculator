@@ -30,19 +30,36 @@
         <div class="status">
             <div class="status-text" id="status">Ожидание ввода...</div>
         </div>
+        <div class="rounds">
+            <div class="round-headline">ОКРУГЛЕНИЕ</div>
+            <div class="round no-container">выкл
+                <input id="no-round" type="checkbox">
+            </div>
+            <div class="round to-1_100-container">1/100
+                <input id="round-to-1_100" type="checkbox">
+            </div>
+            <div class="round to-5_100-container">5/100
+                <input id="round-to-5_100" type="checkbox">
+            </div>
+            <div class="round to-custom">своё&nbsp&nbsp
+                <input id="round-to-custom-up">&nbsp/&nbsp
+                <input id="round-to-custom-down">
+            </div>
+        </div>
         <div class="steps">
+            <button class="uno" id="uno"></button>
+            <div class="indent"></div>
+            <div class="input-stepB-container">шаг <span id="span-b">b</span>
+                <input id="input-stepB">
+            </div>
+            <div class="input-stepA-container">шаг <span id="span-a">a</span>
+                <input id="input-stepA">
+            </div>
             <div class="number">
                 <ul id="num">
                 </ul>
             </div>
             <div class="input-steps">
-                <button class="uno" id="uno"></button>
-                <div class="input-stepB-container">шаг <span id="span-b">b</span>
-                    <input id="step-b_l45-a">
-                </div>
-                <div class="input-stepA-container">шаг <span id="span-a">a</span>
-                    <input id="step-a_l45-b">
-                </div>
                 <div class="step B">
                     <ul id="stepB">
                     </ul>

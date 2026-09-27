@@ -13,7 +13,7 @@ body {
     padding-top: 40px;
 }
 
-.main, .steps, .status {
+.main, .status {
     box-sizing: border-box;
     width: 360px;
     display: flex;
@@ -58,17 +58,18 @@ input {
     font-size: 1.2rem;
     text-align: center;
     font-family: "Roboto", sans-serif;
+    text-overflow: ellipsis;
 }
 
 #lengthB {
     border-color: #3BCCCA;
 }
 
-#step-b_l45-a {
+#input-stepB {
     border-color: #3BCCCA;
 }
 
-#step-a_l45-b {
+#input-stepA {
     border-color: #00A0E3;
 }
 
@@ -124,11 +125,65 @@ input:disabled {
     width: 110px;
 }
 
-.steps {
+.rounds {
     margin-top: 20px;
     border-top: solid;
     border-color: #00A0E3;
+    background-color: #F4FAFE;
     width: 310px;
+    height: 64px;
+    display: flex;
+    justify-content: space-evenly;
+    position: relative;
+}
+
+.round-headline {
+    position: absolute;
+    background-color: white;
+    border-radius: 5px;
+    z-index: 1;
+    padding: 2px 5px;
+    color: #00A0E3;
+    margin: -10px;
+    font-size: 0.8em;
+    font-weight: 600;
+}
+
+.round {
+    text-align: center;
+    color: #3F5F6D;
+    font-size: 0.8em;
+    width: 50px;
+    align-content: center;
+}
+
+.round input[type="checkbox"] {
+    accent-color: #3BCCCA;
+    width: 20px;
+    height: 20px;
+}
+
+.to-custom {
+    display: flex;
+    flex-wrap: wrap;
+    width: 120px;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 2px;
+}
+
+.to-custom input {
+    width: 60px;
+    height: 18px;
+}
+
+.steps {
+    margin-top: 10px;
+    width: 310px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    position: relative;
 }
 
 .number {
@@ -138,48 +193,51 @@ input:disabled {
 .input-steps {
     display: flex;
     width: 260px;
-    justify-content: space-evenly;
-    gap: 20px;
-    position: relative;
+    justify-content: flex-end;
+    gap: 11px;
 }
 
 ul {
-    margin-top: 29px;
     list-style-type: none;
     font-size: 1.2rem;
     padding: 0;
+    margin-top: -34px;
 }
 
 .number ul li:nth-child(odd) {
-    width: 270px;
+    width: 300px;
     background-color: #F4FAFE;
-    padding: 0 20px;
     color: #00A0E3;
+    padding-left: 10px;
     font-size: 0.9rem;
     line-height: 32px;
 }
 
 .number ul li:nth-child(even) {
-    width: 270px;
+    width: 300px;
     background-color: white;
-    padding: 0 20px;
     color: #00A0E3;
+    padding-left: 10px;
     font-size: 0.9rem;
     line-height: 32px;
 }
 
 .step ul li:nth-child(odd) {
-    padding: 0 20px;
     color: #3F5F6D;
-    text-align: end;
+    text-align: right;
     line-height: 32px;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .step ul li:nth-child(even) {
-    padding: 0 20px;
     color: #96A7B1;
-    text-align: end;
+    text-align: right;
     line-height: 32px;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .uno {
@@ -193,28 +251,42 @@ ul {
     aspect-ratio: 1;
     border: 0;
     padding: 0;
-    left: 123px;
-    top: 3px;
+    left: 173px;
+    top: -7px;
+    z-index: 2;
 }
 
 .flip {
     transform: scaleX(-1);
 }
 
+.indent {
+    width: 50px;
+}
+
 .input-stepB-container {
     color: #3F5F6D;
-    position: absolute;
     text-align: center;
-    width: 95px;
-    left: 23px;
-    top: 7px;
+    width: 140px;
+    z-index: 1;
 }
 
 .input-stepA-container {
     color: #3F5F6D;
-    position: absolute;
     text-align: center;
-    width: 95px;
-    left: 153px;
-    top: 7px;
+    width: 120px;
+    z-index: 1;
 }
+
+#input-stepB, #input-stepA {
+    width: 110px;
+    padding: 0;
+}
+
+.step.B, .step.A {
+    width: 120px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
