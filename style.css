@@ -166,7 +166,7 @@ input:disabled {
 .to-custom {
     display: flex;
     flex-wrap: wrap;
-    width: 120px;
+    width: 125px;
     justify-content: flex-end;
     align-items: center;
     gap: 2px;
@@ -280,6 +280,7 @@ ul {
 
 #input-stepB, #input-stepA {
     width: 110px;
+    height: 32px;
     padding: 0;
 }
 

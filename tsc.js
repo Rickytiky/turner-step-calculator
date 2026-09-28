@@ -311,7 +311,7 @@ function stepCalc () {
 
             //шаг b
             const nextStepB = document.createElement("li");
-            nextStepB.textContent = `${(roundToCustom(b + i*b))}`;
+            nextStepB.textContent = `${(b + i*b).toFixed(2)}`;
             stepB.appendChild(nextStepB);
 
             //шаг a
@@ -324,7 +324,7 @@ function stepCalc () {
         stepBInput.dataset.fullValue = stepBInput.value;
         stepAInput.dataset.fullValue = "";
         stepAInput.value = roundToCustom(a);
-        stepBInput.value = roundToCustom(b);
+        stepBInput.value = (b).toFixed(2);
 
         //разблокируем uno
         unoBtn.disabled = false;
@@ -347,14 +347,14 @@ function stepCalc () {
 
             //шаг a
             const nextStepA = document.createElement("li");
-            nextStepA.textContent = `${(roundToCustom(a + i*a))}`;
+            nextStepA.textContent = `${(a + i*a).toFixed(2)}`;
             stepA.appendChild(nextStepA);
         };
 
         //сохраняем точные значения и округляем их для вывода на экран
         stepAInput.dataset.fullValue = stepAInput.value;
         stepBInput.dataset.fullValue = "";
-        stepAInput.value = roundToCustom(a);
+        stepAInput.value = (a).toFixed(2);
         stepBInput.value = roundToCustom(b);
 
         //разблокируем uno
